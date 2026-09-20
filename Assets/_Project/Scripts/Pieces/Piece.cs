@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Piece : MonoBehaviour
@@ -10,6 +11,8 @@ public class Piece : MonoBehaviour
 
     [Header("Settings")]
     public float blockSize = 100f;
+
+    private List<RectTransform> pieceBlocks = new List<RectTransform>();
 
     public void Setup(PieceDataSO newPieceData)
     {
@@ -81,5 +84,12 @@ public class Piece : MonoBehaviour
         float yPosition = (cellPosition.y - centerY) * blockSize;
 
         newBlock.anchoredPosition = new Vector2(xPosition,yPosition);
+
+        pieceBlocks.Add(newBlock);
+    }
+
+    public List<RectTransform> GetBlocks()
+    {
+        return pieceBlocks;
     }
 }
