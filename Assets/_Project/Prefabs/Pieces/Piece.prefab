@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3145466157551459346}
   - component: {fileID: 4477997809894875263}
   - component: {fileID: 5151637801648644408}
+  - component: {fileID: -4351959633765438753}
   m_Layer: 5
   m_Name: Piece
   m_TagString: Untagged
@@ -60,3 +61,15 @@ MonoBehaviour:
   pieceData: {fileID: 0}
   blockPrefab: {fileID: 186141278737582734, guid: 93a782f6795437a49979b27e7a08626a, type: 3}
   blockSize: 100
+--- !u!114 &-4351959633765438753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6808781552830551565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2767e114ec686a469807d01f155f517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PieceDrag
