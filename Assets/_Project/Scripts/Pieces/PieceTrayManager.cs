@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PieceTrayManager : MonoBehaviour
 {
     [Header("Piece Prefab")]
@@ -11,6 +10,8 @@ public class PieceTrayManager : MonoBehaviour
     [Header("Available Pieces")]
     public PieceDataSO[] availablePieces;
 
+    private int remainingPieces;
+
     private void Start()
     {
         CreateNewPieces();
@@ -18,6 +19,8 @@ public class PieceTrayManager : MonoBehaviour
 
     private void CreateNewPieces()
     {
+        remainingPieces = pieceSlots.Length;
+
         for (int i = 0; i < pieceSlots.Length; i++)
         {
             PieceDataSO randomPieceData = GetRandomPiece();
@@ -27,7 +30,6 @@ public class PieceTrayManager : MonoBehaviour
             RectTransform pieceRect = newPiece.GetComponent<RectTransform>();
 
             pieceRect.anchoredPosition = Vector2.zero;
-
             pieceRect.localScale = Vector3.one;
 
             newPiece.Setup(randomPieceData);
@@ -39,5 +41,17 @@ public class PieceTrayManager : MonoBehaviour
         int randomIndex = Random.Range(0,availablePieces.Length);
 
         return availablePieces[randomIndex];
+    }
+
+    public void PieceUsed()
+    {
+        remainingPieces--;
+
+        Debug.Log("Kalan parça sayısı: " + remainingPieces);
+
+        if (remainingPieces <= 0)
+        {
+            CreateNewPieces();
+        }
     }
 }

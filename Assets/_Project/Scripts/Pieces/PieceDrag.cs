@@ -5,12 +5,11 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 {
     private RectTransform rectTransform;
     private Canvas canvas;
-
     private Transform startParent;
     private Vector2 startPosition;
-
     private Piece piece;
     private BoardManager boardManager;
+    private PieceTrayManager pieceTrayManager;
 
     private void Awake()
     {
@@ -21,6 +20,8 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         piece = GetComponent<Piece>();
 
         boardManager = FindFirstObjectByType<BoardManager>();
+
+        pieceTrayManager = FindFirstObjectByType<PieceTrayManager>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -48,6 +49,8 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         if (piecePlaced)
         {
             Debug.Log("Parça board'a yerleştirildi.");
+
+            pieceTrayManager.PieceUsed();
         }
         else
         {
