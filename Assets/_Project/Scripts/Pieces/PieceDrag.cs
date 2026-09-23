@@ -11,6 +11,8 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
     private BoardManager boardManager;
     private PieceTrayManager pieceTrayManager;
     private ScoreManager scoreManager;
+    private ComboManager comboManager;
+
 
     private void Awake()
     {
@@ -25,6 +27,8 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         pieceTrayManager = FindFirstObjectByType<PieceTrayManager>();
 
         scoreManager = FindFirstObjectByType<ScoreManager>();
+
+        comboManager = FindFirstObjectByType<ComboManager>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -45,41 +49,29 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
-    public void OnEndDrag(
-    PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData)
     {
-        int blockCount =
-            piece.GetBlockCount();
+        int blockCount =  piece.GetBlockCount();
 
         int clearedLines;
 
-        bool piecePlaced =
-            boardManager.PlacePiece(
-                piece,
-                out clearedLines
-            );
+        bool piecePlaced = boardManager.PlacePiece(piece,out clearedLines);
 
         if (piecePlaced)
         {
-            Debug.Log(
-                "Parça board'a yerleştirildi."
-            );
+            Debug.Log("Parça board'a yerleştirildi.");
+            
+            scoreManager.AddPieceScore(blockCount);
+            
+            scoreManager.AddLineClearScore(clearedLines);
 
-            scoreManager.AddPieceScore(
-                blockCount
-            );
-
-            scoreManager.AddLineClearScore(
-                clearedLines
-            );
+            comboManager.ProcessMove(clearedLines);
 
             pieceTrayManager.PieceUsed();
         }
         else
         {
-            Debug.Log(
-                "Geçersiz konum."
-            );
+            Debug.Log("Geçersiz konum.");
 
             ReturnToStart();
         }
