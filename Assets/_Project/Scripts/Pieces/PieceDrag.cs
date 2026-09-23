@@ -5,8 +5,10 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 {
     private RectTransform rectTransform;
     private Canvas canvas;
+
     private Transform startParent;
     private Vector2 startPosition;
+
     private Piece piece;
     private BoardManager boardManager;
 
@@ -27,7 +29,7 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 
         startPosition = rectTransform.anchoredPosition;
 
-        transform.SetParent(canvas.transform, true);
+        transform.SetParent(canvas.transform,true);
 
         transform.SetAsLastSibling();
 
@@ -41,23 +43,23 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        bool canPlace = boardManager.CanPlacePiece(piece);
+        bool piecePlaced = boardManager.PlacePiece(piece);
 
-        if (canPlace)
+        if (piecePlaced)
         {
-            Debug.Log("Geçerli Konum");
+            Debug.Log("Parça board'a yerleştirildi.");
         }
         else
         {
-            Debug.Log("Geçersiz Konum");
-        }
+            Debug.Log("Geçersiz konum.");
 
-        ReturnToStart();
+            ReturnToStart();
+        }
     }
 
     private void ReturnToStart()
     {
-        transform.SetParent(startParent, false);
+        transform.SetParent(startParent,false);
 
         rectTransform.anchoredPosition = startPosition;
 

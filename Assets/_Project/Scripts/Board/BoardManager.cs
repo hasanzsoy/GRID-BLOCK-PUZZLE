@@ -36,6 +36,7 @@ public class BoardManager : MonoBehaviour
 
         newCell.row = row;
         newCell.column = column;
+
         newCell.isOccupied = false;
 
         newCell.name = "Cell_" + row + "_" + column;
@@ -45,50 +46,76 @@ public class BoardManager : MonoBehaviour
 
     public bool CanPlacePiece(Piece piece)
     {
+        List<BoardCell> detectedCells = GetPlacementCells(piece);
+
+        return detectedCells != null;
+    }
+
+    public bool PlacePiece(Piece piece)
+    {
+        List<BoardCell> detectedCells = GetPlacementCells(piece);
+
+        if (detectedCells == null)
+        {
+            return false;
+        }
+
+        List<RectTransform> blocks = piece.GetBlocks();
+
+        for (int i = 0; i < blocks.Count; i++)
+        {
+            detectedCells[i].SetBlock(blocks[i]);
+        }
+
+        Destroy(piece.gameObject);
+
+        return true;
+    }
+
+    private List<BoardCell> GetPlacementCells(Piece piece)
+    {
         List<RectTransform> blocks = piece.GetBlocks();
 
         List<BoardCell> detectedCells = new List<BoardCell>();
 
         for (int i = 0; i < blocks.Count; i++)
         {
-            BoardCell detectedCell =
-                GetCellUnderBlock(blocks[i]);
+            BoardCell detectedCell = GetCellUnderBlock(blocks[i]);
 
             if (detectedCell == null)
             {
-                return false;
+                return null;
             }
 
             if (detectedCell.isOccupied)
             {
-                return false;
+                return null;
             }
 
             if (detectedCells.Contains(detectedCell))
             {
-                return false;
+                return null;
             }
 
             detectedCells.Add(detectedCell);
         }
 
-        return true;
+        return detectedCells;
     }
 
     private BoardCell GetCellUnderBlock(RectTransform block)
     {
         Vector2 blockScreenPosition = RectTransformUtility.WorldToScreenPoint(null,block.position);
 
-        for (int row = 0; row < boardSettings.rows; row++)
+        for (int row = 0;row < boardSettings.rows;row++)
         {
-            for (int column = 0; column < boardSettings.columns; column++)
+            for (int column = 0;column < boardSettings.columns;column++)
             {
                 BoardCell cell = boardCells[row, column];
 
                 RectTransform cellRect = cell.GetComponent<RectTransform>();
 
-                bool isInside =
-                    RectTransformUtility.RectangleContainsScreenPoint(cellRect,blockScreenPosition,null);
+                bool isInside = RectTransformUtility.RectangleContainsScreenPoint(cellRect,blockScreenPosition,null);
 
                 if (isInside)
                 {
