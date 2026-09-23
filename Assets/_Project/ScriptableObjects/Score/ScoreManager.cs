@@ -18,13 +18,58 @@ public class ScoreManager : MonoBehaviour
 
     public void AddPieceScore(int blockCount)
     {
-        int earnedScore = blockCount * scoreSettings.scorePerBlock;
+        int earnedScore =
+            blockCount * scoreSettings.scorePerBlock;
 
         currentScore += earnedScore;
 
         UpdateScoreText();
 
-        Debug.Log("Kazanılan puan: " + earnedScore +" | Toplam skor: " + currentScore);
+        Debug.Log(
+            "Parça puanı: " + earnedScore +
+            " | Toplam skor: " + currentScore
+        );
+    }
+
+    public void AddLineClearScore(int clearedLines)
+    {
+        if (clearedLines <= 0)
+        {
+            return;
+        }
+
+        int bonusScore = 0;
+
+        if (clearedLines == 1)
+        {
+            bonusScore =
+                scoreSettings.oneLineBonus;
+        }
+        else if (clearedLines == 2)
+        {
+            bonusScore =
+                scoreSettings.twoLineBonus;
+        }
+        else if (clearedLines == 3)
+        {
+            bonusScore =
+                scoreSettings.threeLineBonus;
+        }
+        else
+        {
+            bonusScore =
+                scoreSettings.fourOrMoreLineBonus;
+        }
+
+        currentScore += bonusScore;
+
+        UpdateScoreText();
+
+        Debug.Log(
+            "Line bonus: +" + bonusScore +
+            " | Temizlenen çizgi: " + clearedLines +
+            " | Toplam skor: " + currentScore
+        );
     }
 
     public void ResetScore()
@@ -36,7 +81,8 @@ public class ScoreManager : MonoBehaviour
 
     private void UpdateScoreText()
     {
-        scoreText.text = currentScore.ToString();
+        scoreText.text =
+            currentScore.ToString();
     }
 
     public int GetCurrentScore()
