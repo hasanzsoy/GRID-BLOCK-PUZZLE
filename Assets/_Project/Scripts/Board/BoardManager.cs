@@ -19,7 +19,10 @@ public class BoardManager : MonoBehaviour
 
     private void CreateBoard()
     {
-        boardCells = new BoardCell[boardSettings.rows,boardSettings.columns];
+        boardCells = new BoardCell[
+            boardSettings.rows,
+            boardSettings.columns
+        ];
 
         for (int row = 0; row < boardSettings.rows; row++)
         {
@@ -32,44 +35,51 @@ public class BoardManager : MonoBehaviour
 
     private void CreateCell(int row, int column)
     {
-        BoardCell newCell = Instantiate(cellPrefab,boardParent);
+        BoardCell newCell = Instantiate(
+            cellPrefab,
+            boardParent
+        );
 
         newCell.row = row;
         newCell.column = column;
 
         newCell.isOccupied = false;
 
-        newCell.name = "Cell_" + row + "_" + column;
+        newCell.name =
+            "Cell_" + row + "_" + column;
 
         boardCells[row, column] = newCell;
     }
 
     public bool CanPlacePiece(Piece piece)
     {
-        List<BoardCell> detectedCells = GetPlacementCells(piece);
+        List<BoardCell> detectedCells =
+            GetPlacementCells(piece);
 
         return detectedCells != null;
     }
 
     public bool PlacePiece(Piece piece)
     {
-        List<BoardCell> detectedCells = GetPlacementCells(piece);
+        List<BoardCell> detectedCells =
+            GetPlacementCells(piece);
 
         if (detectedCells == null)
         {
             return false;
         }
 
-        List<RectTransform> blocks = piece.GetBlocks();
+        List<RectTransform> blocks =
+            piece.GetBlocks();
 
         for (int i = 0; i < blocks.Count; i++)
         {
-            detectedCells[i].SetBlock(blocks[i]);
+            detectedCells[i].SetBlock(
+                blocks[i]
+            );
         }
 
-        // Parça yerleştirildikten sonra
-        // tamamlanan satır ve sütunları kontrol ediyoruz.
-        CheckCompletedLines();
+        ClearCompletedLines();
 
         Destroy(piece.gameObject);
 
@@ -78,13 +88,16 @@ public class BoardManager : MonoBehaviour
 
     private List<BoardCell> GetPlacementCells(Piece piece)
     {
-        List<RectTransform> blocks = piece.GetBlocks();
+        List<RectTransform> blocks =
+            piece.GetBlocks();
 
-        List<BoardCell> detectedCells = new List<BoardCell>();
+        List<BoardCell> detectedCells =
+            new List<BoardCell>();
 
         for (int i = 0; i < blocks.Count; i++)
         {
-            BoardCell detectedCell = GetCellUnderBlock(blocks[i]);
+            BoardCell detectedCell =
+                GetCellUnderBlock(blocks[i]);
 
             if (detectedCell == null)
             {
@@ -107,19 +120,36 @@ public class BoardManager : MonoBehaviour
         return detectedCells;
     }
 
-    private BoardCell GetCellUnderBlock(RectTransform block)
+    private BoardCell GetCellUnderBlock(
+        RectTransform block)
     {
-        Vector2 blockScreenPosition = RectTransformUtility.WorldToScreenPoint(null,block.position);
+        Vector2 blockScreenPosition =
+            RectTransformUtility.WorldToScreenPoint(
+                null,
+                block.position
+            );
 
-        for (int row = 0;row < boardSettings.rows;row++)
+        for (int row = 0;
+             row < boardSettings.rows;
+             row++)
         {
-            for (int column = 0;column < boardSettings.columns;column++)
+            for (int column = 0;
+                 column < boardSettings.columns;
+                 column++)
             {
-                BoardCell cell = boardCells[row, column];
+                BoardCell cell =
+                    boardCells[row, column];
 
-                RectTransform cellRect = cell.GetComponent<RectTransform>();
+                RectTransform cellRect =
+                    cell.GetComponent<RectTransform>();
 
-                bool isInside = RectTransformUtility.RectangleContainsScreenPoint(cellRect,blockScreenPosition,null);
+                bool isInside =
+                    RectTransformUtility
+                        .RectangleContainsScreenPoint(
+                            cellRect,
+                            blockScreenPosition,
+                            null
+                        );
 
                 if (isInside)
                 {
@@ -131,19 +161,49 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    private void CheckCompletedLines()
+    private void ClearCompletedLines()
     {
-        CheckRows();
-        CheckColumns();
+        List<BoardCell> cellsToClear =
+            new List<BoardCell>();
+
+        int completedLines = 0;
+
+        completedLines +=
+            FindCompletedRows(cellsToClear);
+
+        completedLines +=
+            FindCompletedColumns(cellsToClear);
+
+        if (completedLines == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < cellsToClear.Count; i++)
+        {
+            cellsToClear[i].ClearCell();
+        }
+
+        Debug.Log(
+            "Temizlenen çizgi sayısı: " +
+            completedLines
+        );
     }
 
-    private void CheckRows()
+    private int FindCompletedRows(
+        List<BoardCell> cellsToClear)
     {
-        for (int row = 0; row < boardSettings.rows; row++)
+        int completedRows = 0;
+
+        for (int row = 0;
+             row < boardSettings.rows;
+             row++)
         {
             bool isRowFull = true;
 
-            for (int column = 0;column < boardSettings.columns;column++)
+            for (int column = 0;
+                 column < boardSettings.columns;
+                 column++)
             {
                 if (!boardCells[row, column].isOccupied)
                 {
@@ -154,18 +214,46 @@ public class BoardManager : MonoBehaviour
 
             if (isRowFull)
             {
-                Debug.Log("Satır " + (row + 1) + " tamamlandı!");
+                completedRows++;
+
+                Debug.Log(
+                    "Satır " +
+                    (row + 1) +
+                    " temizlenecek!"
+                );
+
+                for (int column = 0;
+                     column < boardSettings.columns;
+                     column++)
+                {
+                    BoardCell cell =
+                        boardCells[row, column];
+
+                    if (!cellsToClear.Contains(cell))
+                    {
+                        cellsToClear.Add(cell);
+                    }
+                }
             }
         }
+
+        return completedRows;
     }
 
-    private void CheckColumns()
+    private int FindCompletedColumns(
+        List<BoardCell> cellsToClear)
     {
-        for (int column = 0;column < boardSettings.columns;column++)
+        int completedColumns = 0;
+
+        for (int column = 0;
+             column < boardSettings.columns;
+             column++)
         {
             bool isColumnFull = true;
 
-            for (int row = 0;row < boardSettings.rows;row++)
+            for (int row = 0;
+                 row < boardSettings.rows;
+                 row++)
             {
                 if (!boardCells[row, column].isOccupied)
                 {
@@ -176,8 +264,29 @@ public class BoardManager : MonoBehaviour
 
             if (isColumnFull)
             {
-                Debug.Log("Sütun " + (column + 1) + " tamamlandı!");
+                completedColumns++;
+
+                Debug.Log(
+                    "Sütun " +
+                    (column + 1) +
+                    " temizlenecek!"
+                );
+
+                for (int row = 0;
+                     row < boardSettings.rows;
+                     row++)
+                {
+                    BoardCell cell =
+                        boardCells[row, column];
+
+                    if (!cellsToClear.Contains(cell))
+                    {
+                        cellsToClear.Add(cell);
+                    }
+                }
             }
         }
+
+        return completedColumns;
     }
 }
