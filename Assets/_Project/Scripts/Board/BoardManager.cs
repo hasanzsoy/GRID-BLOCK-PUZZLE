@@ -59,11 +59,17 @@ public class BoardManager : MonoBehaviour
         return detectedCells != null;
     }
 
-    public bool PlacePiece(Piece piece)
+    public bool PlacePiece(
+        Piece piece,
+        out int clearedLines)
     {
+        // Başlangıçta temizlenen çizgi yok.
+        clearedLines = 0;
+
         List<BoardCell> detectedCells =
             GetPlacementCells(piece);
 
+        // Parça burada yerleşemiyorsa false dön.
         if (detectedCells == null)
         {
             return false;
@@ -72,6 +78,7 @@ public class BoardManager : MonoBehaviour
         List<RectTransform> blocks =
             piece.GetBlocks();
 
+        // Piece içindeki blokları BoardCell'lere yerleştir.
         for (int i = 0; i < blocks.Count; i++)
         {
             detectedCells[i].SetBlock(
@@ -79,8 +86,12 @@ public class BoardManager : MonoBehaviour
             );
         }
 
-        ClearCompletedLines();
+        // Yerleştirme sonrası tamamlanan çizgileri temizle.
+        // Kaç çizgi temizlendiğini geri al.
+        clearedLines =
+            ClearCompletedLines();
 
+        // Piece root artık boş kaldığı için siliyoruz.
         Destroy(piece.gameObject);
 
         return true;
@@ -99,16 +110,19 @@ public class BoardManager : MonoBehaviour
             BoardCell detectedCell =
                 GetCellUnderBlock(blocks[i]);
 
+            // Board dışında.
             if (detectedCell == null)
             {
                 return null;
             }
 
+            // Hücre zaten dolu.
             if (detectedCell.isOccupied)
             {
                 return null;
             }
 
+            // İki blok aynı hücreye denk gelmiş.
             if (detectedCells.Contains(detectedCell))
             {
                 return null;
@@ -161,25 +175,31 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    private void ClearCompletedLines()
+    private int ClearCompletedLines()
     {
         List<BoardCell> cellsToClear =
             new List<BoardCell>();
 
         int completedLines = 0;
 
+        // Tamamlanan satırları bul.
         completedLines +=
             FindCompletedRows(cellsToClear);
 
+        // Tamamlanan sütunları bul.
         completedLines +=
             FindCompletedColumns(cellsToClear);
 
+        // Hiç çizgi tamamlanmadıysa 0 döndür.
         if (completedLines == 0)
         {
-            return;
+            return 0;
         }
 
-        for (int i = 0; i < cellsToClear.Count; i++)
+        // Bulduğumuz hücreleri temizle.
+        for (int i = 0;
+             i < cellsToClear.Count;
+             i++)
         {
             cellsToClear[i].ClearCell();
         }
@@ -188,6 +208,8 @@ public class BoardManager : MonoBehaviour
             "Temizlenen çizgi sayısı: " +
             completedLines
         );
+
+        return completedLines;
     }
 
     private int FindCompletedRows(
@@ -229,6 +251,7 @@ public class BoardManager : MonoBehaviour
                     BoardCell cell =
                         boardCells[row, column];
 
+                    // Aynı hücreyi iki kez ekleme.
                     if (!cellsToClear.Contains(cell))
                     {
                         cellsToClear.Add(cell);
@@ -279,6 +302,7 @@ public class BoardManager : MonoBehaviour
                     BoardCell cell =
                         boardCells[row, column];
 
+                    // Aynı hücreyi iki kez ekleme.
                     if (!cellsToClear.Contains(cell))
                     {
                         cellsToClear.Add(cell);

@@ -45,23 +45,41 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag(
+    PointerEventData eventData)
     {
-        int blockCount = piece.GetBlockCount();
+        int blockCount =
+            piece.GetBlockCount();
 
-        bool piecePlaced = boardManager.PlacePiece(piece);
+        int clearedLines;
+
+        bool piecePlaced =
+            boardManager.PlacePiece(
+                piece,
+                out clearedLines
+            );
 
         if (piecePlaced)
         {
-            Debug.Log("Parça board'a yerleştirildi.");
+            Debug.Log(
+                "Parça board'a yerleştirildi."
+            );
 
-            scoreManager.AddPieceScore(blockCount);
+            scoreManager.AddPieceScore(
+                blockCount
+            );
+
+            scoreManager.AddLineClearScore(
+                clearedLines
+            );
 
             pieceTrayManager.PieceUsed();
         }
         else
         {
-            Debug.Log("Geçersiz konum.");
+            Debug.Log(
+                "Geçersiz konum."
+            );
 
             ReturnToStart();
         }
