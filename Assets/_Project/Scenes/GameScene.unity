@@ -634,6 +634,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23b9b6397892b3646b9aade943bcc3f0, type: 2}
   - {fileID: 11400000, guid: 85836314eadba834c8519ee0c48a19bb, type: 2}
   - {fileID: 11400000, guid: 6f9dc54f03fe2b641a2a486929901570, type: 2}
+  - {fileID: 11400000, guid: caeb6bfaa1b1d8b4c9d5afc7c9345625, type: 2}
 --- !u!222 &1839200602
 CanvasRenderer:
   m_ObjectHideFlags: 0

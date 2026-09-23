@@ -67,6 +67,10 @@ public class BoardManager : MonoBehaviour
             detectedCells[i].SetBlock(blocks[i]);
         }
 
+        // Parça yerleştirildikten sonra
+        // tamamlanan satır ve sütunları kontrol ediyoruz.
+        CheckCompletedLines();
+
         Destroy(piece.gameObject);
 
         return true;
@@ -125,5 +129,55 @@ public class BoardManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void CheckCompletedLines()
+    {
+        CheckRows();
+        CheckColumns();
+    }
+
+    private void CheckRows()
+    {
+        for (int row = 0; row < boardSettings.rows; row++)
+        {
+            bool isRowFull = true;
+
+            for (int column = 0;column < boardSettings.columns;column++)
+            {
+                if (!boardCells[row, column].isOccupied)
+                {
+                    isRowFull = false;
+                    break;
+                }
+            }
+
+            if (isRowFull)
+            {
+                Debug.Log("Satır " + (row + 1) + " tamamlandı!");
+            }
+        }
+    }
+
+    private void CheckColumns()
+    {
+        for (int column = 0;column < boardSettings.columns;column++)
+        {
+            bool isColumnFull = true;
+
+            for (int row = 0;row < boardSettings.rows;row++)
+            {
+                if (!boardCells[row, column].isOccupied)
+                {
+                    isColumnFull = false;
+                    break;
+                }
+            }
+
+            if (isColumnFull)
+            {
+                Debug.Log("Sütun " + (column + 1) + " tamamlandı!");
+            }
+        }
     }
 }
