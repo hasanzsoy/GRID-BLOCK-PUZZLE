@@ -92,4 +92,13 @@ public class Piece : MonoBehaviour
     {
         return pieceBlocks;
     }
+    public int GetBlockCount()
+    {
+        if (pieceData == null)
+        {
+            return 0;
+        }
+
+        return pieceData.cells.Length;
+    }
 }

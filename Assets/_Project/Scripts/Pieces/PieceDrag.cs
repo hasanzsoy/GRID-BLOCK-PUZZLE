@@ -10,6 +10,7 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
     private Piece piece;
     private BoardManager boardManager;
     private PieceTrayManager pieceTrayManager;
+    private ScoreManager scoreManager;
 
     private void Awake()
     {
@@ -22,6 +23,8 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         boardManager = FindFirstObjectByType<BoardManager>();
 
         pieceTrayManager = FindFirstObjectByType<PieceTrayManager>();
+
+        scoreManager = FindFirstObjectByType<ScoreManager>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -44,11 +47,15 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        int blockCount = piece.GetBlockCount();
+
         bool piecePlaced = boardManager.PlacePiece(piece);
 
         if (piecePlaced)
         {
             Debug.Log("Parça board'a yerleştirildi.");
+
+            scoreManager.AddPieceScore(blockCount);
 
             pieceTrayManager.PieceUsed();
         }
