@@ -1515,8 +1515,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
   gameOverPanel: {fileID: 1770057090}
   finalScoreText: {fileID: 1919806608}
-  bestScoreText: {fileID: 1138666411}
-  newRecordText: {fileID: 835101754}
+  bestScoreText: {fileID: 402966556}
+  newRecordText: {fileID: 2133318705}
 --- !u!4 &1329055558
 Transform:
   m_ObjectHideFlags: 0
