@@ -10,6 +10,8 @@ public class GameOverManager : MonoBehaviour
     private ComboManager comboManager;
     private BoardManager boardManager;
     private PieceTrayManager pieceTrayManager;
+    private HighScoreManager highScoreManager;
+
     private bool isGameOver;
 
     private void Awake()
@@ -18,6 +20,7 @@ public class GameOverManager : MonoBehaviour
         comboManager = FindFirstObjectByType<ComboManager>();
         boardManager = FindFirstObjectByType<BoardManager>();
         pieceTrayManager = FindFirstObjectByType<PieceTrayManager>();
+        highScoreManager = FindFirstObjectByType<HighScoreManager>();
     }
 
     private void Start()
@@ -50,10 +53,11 @@ public class GameOverManager : MonoBehaviour
     }
     public void RestartGame()
     {
-        Debug.Log("Oyun yeniden başlatılıyor...");  
+        Debug.Log("Oyun yeniden başlatılıyor...");
         boardManager.ResetBoard();
         scoreManager.ResetScore();
         comboManager.ResetCombo();
+        highScoreManager.ResetForNewGame();
         pieceTrayManager.ResetTray();
         isGameOver = false;
         if (gameOverPanel != null)
