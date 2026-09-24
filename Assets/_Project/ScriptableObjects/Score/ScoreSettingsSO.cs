@@ -11,4 +11,6 @@ public class ScoreSettingsSO : ScriptableObject
     public int twoLineBonus = 25;
     public int threeLineBonus = 45;
     public int fourOrMoreLineBonus = 70;
+    [Header("Combo Bonus")]
+    public int comboBonusPerLevel = 5;
 }

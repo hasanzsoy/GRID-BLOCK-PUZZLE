@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: DefaultScoreSettings
   m_EditorClassIdentifier: Assembly-CSharp::ScoreSettingsSO
   scorePerBlock: 1
+  oneLineBonus: 10
+  twoLineBonus: 25
+  threeLineBonus: 45
+  fourOrMoreLineBonus: 70
+  comboBonusPerLevel: 5

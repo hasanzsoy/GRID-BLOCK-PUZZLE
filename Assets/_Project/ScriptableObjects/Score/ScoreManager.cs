@@ -60,6 +60,24 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("Line bonus: +" + bonusScore +" | Temizlenen çizgi: " + clearedLines +" | Toplam skor: " + currentScore);
     }
 
+    public void AddComboScore(int comboCount)
+    {
+        // Combo 0 veya Combo 1 için
+        // ekstra puan vermiyoruz.
+        if (comboCount <= 1)
+        {
+            return;
+        }
+
+        int comboBonus = (comboCount - 1) * scoreSettings.comboBonusPerLevel;
+
+        currentScore += comboBonus;
+
+        UpdateScoreText();
+
+        Debug.Log("Combo bonus: +" + comboBonus +" | Combo: " + comboCount +" | Toplam skor: " + currentScore);
+    }
+
     public void ResetScore()
     {
         currentScore = 0;
