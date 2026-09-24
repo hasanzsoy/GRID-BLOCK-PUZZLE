@@ -76,4 +76,8 @@ public class HighScoreManager : MonoBehaviour
     {
         return bestScore;
     }
+    public bool HasNewHighScoreThisGame()
+    {
+        return newHighScoreShownThisGame;
+    }
 }

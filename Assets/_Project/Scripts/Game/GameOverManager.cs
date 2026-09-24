@@ -6,12 +6,13 @@ public class GameOverManager : MonoBehaviour
     [Header("Game Over UI")]
     public GameObject gameOverPanel;
     public TMP_Text finalScoreText;
+    public TMP_Text bestScoreText;
+    public TMP_Text newRecordText;
     private ScoreManager scoreManager;
     private ComboManager comboManager;
     private BoardManager boardManager;
     private PieceTrayManager pieceTrayManager;
     private HighScoreManager highScoreManager;
-
     private bool isGameOver;
 
     private void Awake()
@@ -44,13 +45,24 @@ public class GameOverManager : MonoBehaviour
             return;
         }
         int finalScore = scoreManager.GetCurrentScore();
+        int bestScore =  highScoreManager.GetBestScore();
+        bool hasNewHighScore = highScoreManager.HasNewHighScoreThisGame();
         if (finalScoreText != null)
         {
-            finalScoreText.text ="SKOR\n" + finalScore;
+            finalScoreText.text ="SCORE\n" +finalScore;
+        }
+        if (bestScoreText != null)
+        {
+            bestScoreText.text ="BEST\n" + bestScore;
+        }
+        if (newRecordText != null)
+        {
+            newRecordText.gameObject.SetActive(hasNewHighScore);
         }
         gameOverPanel.SetActive(true);
-        Debug.Log("GAME OVER | Final Score: " + finalScore);
+        Debug.Log("GAME OVER | Final Score: " + finalScore +" | Best Score: " + bestScore);
     }
+
     public void RestartGame()
     {
         Debug.Log("Oyun yeniden başlatılıyor...");
