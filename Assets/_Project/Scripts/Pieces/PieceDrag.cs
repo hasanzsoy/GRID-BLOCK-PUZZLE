@@ -54,7 +54,7 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
             comboManager.ProcessMove(clearedLines);
             int currentCombo = comboManager.GetCurrentCombo();
             scoreManager.AddComboScore(currentCombo);
-            pieceTrayManager.PieceUsed();
+            pieceTrayManager.PieceUsed(piece);
         }
         else
         {
