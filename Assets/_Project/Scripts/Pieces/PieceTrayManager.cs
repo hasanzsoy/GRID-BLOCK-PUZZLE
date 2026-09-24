@@ -92,4 +92,22 @@ public class PieceTrayManager : MonoBehaviour
             gameOverManager.ShowGameOver();
         }
     }
+    public void ResetTray()
+    {
+        for (int i = 0;i < activePieces.Count;i++)
+        {
+            Piece currentPiece = activePieces[i];
+
+            if (currentPiece != null)
+            {
+                currentPiece.gameObject.SetActive(false);
+
+                Destroy(currentPiece.gameObject);
+            }
+        }
+        activePieces.Clear();
+        remainingPieces = 0;
+        CreateNewPieces();
+        Debug.Log("Piece Tray sıfırlandı.");
+    }
 }

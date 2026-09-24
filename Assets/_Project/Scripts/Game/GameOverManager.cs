@@ -7,13 +7,22 @@ public class GameOverManager : MonoBehaviour
     public GameObject gameOverPanel;
     public TMP_Text finalScoreText;
     private ScoreManager scoreManager;
+    private ComboManager comboManager;
+    private BoardManager boardManager;
+    private PieceTrayManager pieceTrayManager;
+    private bool isGameOver;
+
     private void Awake()
     {
         scoreManager = FindFirstObjectByType<ScoreManager>();
+        comboManager = FindFirstObjectByType<ComboManager>();
+        boardManager = FindFirstObjectByType<BoardManager>();
+        pieceTrayManager = FindFirstObjectByType<PieceTrayManager>();
     }
 
     private void Start()
     {
+        isGameOver = false;
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
@@ -22,20 +31,35 @@ public class GameOverManager : MonoBehaviour
 
     public void ShowGameOver()
     {
+        if (isGameOver)
+        {
+            return;
+        }
+        isGameOver = true;
         if (gameOverPanel == null)
         {
             return;
         }
-
         int finalScore = scoreManager.GetCurrentScore();
-
         if (finalScoreText != null)
         {
-            finalScoreText.text = "SKOR\n" + finalScore;
+            finalScoreText.text ="SKOR\n" + finalScore;
         }
-
         gameOverPanel.SetActive(true);
-
         Debug.Log("GAME OVER | Final Score: " + finalScore);
+    }
+    public void RestartGame()
+    {
+        Debug.Log("Oyun yeniden başlatılıyor...");  
+        boardManager.ResetBoard();
+        scoreManager.ResetScore();
+        comboManager.ResetCombo();
+        pieceTrayManager.ResetTray();
+        isGameOver = false;
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
+        Debug.Log("Yeni oyun başladı.");
     }
 }

@@ -245,4 +245,15 @@ public class BoardManager : MonoBehaviour
         }
         return true;
     }
+    public void ResetBoard()
+    {
+        for (int row = 0;row < boardSettings.rows;row++)
+        {
+            for (int column = 0;column < boardSettings.columns;column++)
+            {
+                boardCells[row, column].ClearCell();
+            }
+        }
+        Debug.Log("Board temizlendi.");
+    }
 }
