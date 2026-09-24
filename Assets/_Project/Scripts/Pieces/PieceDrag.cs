@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +13,10 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
     private PieceTrayManager pieceTrayManager;
     private ScoreManager scoreManager;
     private ComboManager comboManager;
+    [Header("Drag Animation")]
+    [SerializeField] private float dragScale = 1.15f;
+    [SerializeField] private float pickupDuration = 0.12f;
+    [SerializeField] private float returnDuration = 0.20f;
 
 
     private void Awake()
@@ -31,7 +36,8 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         startPosition = rectTransform.anchoredPosition;
         transform.SetParent(canvas.transform,true);
         transform.SetAsLastSibling();
-        transform.localScale = Vector3.one * 1.1f;
+        transform.DOKill();
+        transform.DOScale(Vector3.one * dragScale,pickupDuration).SetEase(Ease.OutBack);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -65,8 +71,10 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 
     private void ReturnToStart()
     {
-        transform.SetParent(startParent,false);
-        rectTransform.anchoredPosition = startPosition;
-        transform.localScale = Vector3.one;
+        transform.DOKill();
+        rectTransform.DOKill();
+        transform.SetParent(startParent,true);
+        rectTransform.DOAnchorPos(startPosition,returnDuration).SetEase(Ease.OutQuad);
+        transform.DOScale(Vector3.one,returnDuration).SetEase(Ease.OutQuad);
     }
 }
