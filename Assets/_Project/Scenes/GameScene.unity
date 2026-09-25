@@ -285,6 +285,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComboManager
   comboText: {fileID: 693103098}
+  comboStartScale: 0.7
+  comboPopDuration: 0.25
 --- !u!4 &242410806
 Transform:
   m_ObjectHideFlags: 0
@@ -497,7 +499,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'NO SPACE LEFT
 
-    
+
 
     GAME OVER'
   m_isRightToLeft: 0
@@ -1517,6 +1519,8 @@ MonoBehaviour:
   finalScoreText: {fileID: 1919806608}
   bestScoreText: {fileID: 402966556}
   newRecordText: {fileID: 2133318705}
+  panelStartScale: 0.9
+  panelAnimationDuration: 0.35
 --- !u!4 &1329055558
 Transform:
   m_ObjectHideFlags: 0
@@ -1563,6 +1567,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   scoreSettings: {fileID: 11400000, guid: 656b30f15358d8249a6cdb3615e00ad1, type: 2}
   scoreText: {fileID: 101425846}
+  scorePunchScale: 0.2
+  scorePunchDuration: 0.2
 --- !u!4 &1330912657
 Transform:
   m_ObjectHideFlags: 0
@@ -1677,6 +1683,7 @@ GameObject:
   - component: {fileID: 1770057091}
   - component: {fileID: 1770057093}
   - component: {fileID: 1770057092}
+  - component: {fileID: 1770057094}
   m_Layer: 5
   m_Name: GameOverPanel
   m_TagString: Untagged
@@ -1746,6 +1753,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770057090}
   m_CullTransparentMesh: 1
+--- !u!225 &1770057094
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770057090}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1839200599
 GameObject:
   m_ObjectHideFlags: 0
@@ -2277,6 +2296,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HighScoreManager
   bestScoreText: {fileID: 1138666411}
   newHighScoreText: {fileID: 835101754}
+  newHighScoreStartScale: 0.7
+  newHighScoreDuration: 0.35
 --- !u!4 &2106465227
 Transform:
   m_ObjectHideFlags: 0

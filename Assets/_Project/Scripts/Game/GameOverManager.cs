@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +15,11 @@ public class GameOverManager : MonoBehaviour
     private PieceTrayManager pieceTrayManager;
     private HighScoreManager highScoreManager;
     private bool isGameOver;
+    [Header("Game Over Animation")]
+    [SerializeField] private float panelStartScale = 0.90f;
+    [SerializeField] private float panelAnimationDuration = 0.35f;
+
+    private CanvasGroup gameOverCanvasGroup;
 
     private void Awake()
     {
@@ -21,7 +27,11 @@ public class GameOverManager : MonoBehaviour
         comboManager = FindFirstObjectByType<ComboManager>();
         boardManager = FindFirstObjectByType<BoardManager>();
         pieceTrayManager = FindFirstObjectByType<PieceTrayManager>();
-        highScoreManager = FindFirstObjectByType<HighScoreManager>();
+        highScoreManager = FindFirstObjectByType<HighScoreManager>(); 
+        if (gameOverPanel != null)
+        {
+            gameOverCanvasGroup = gameOverPanel.GetComponent<CanvasGroup>();
+        }
     }
 
     private void Start()
@@ -60,6 +70,7 @@ public class GameOverManager : MonoBehaviour
             newRecordText.gameObject.SetActive(hasNewHighScore);
         }
         gameOverPanel.SetActive(true);
+        PlayGameOverAnimation();
         Debug.Log("GAME OVER | Final Score: " + finalScore +" | Best Score: " + bestScore);
     }
 
@@ -74,8 +85,37 @@ public class GameOverManager : MonoBehaviour
         isGameOver = false;
         if (gameOverPanel != null)
         {
+            gameOverPanel.transform.DOKill();
+            if (gameOverCanvasGroup != null)
+            {
+                gameOverCanvasGroup.DOKill();
+                gameOverCanvasGroup.alpha = 1f;
+            }
+            gameOverPanel.transform.localScale = Vector3.one;
             gameOverPanel.SetActive(false);
         }
         Debug.Log("Yeni oyun başladı.");
+    }
+    private void PlayGameOverAnimation()
+    {
+        if (gameOverPanel == null)
+        {
+            return;
+        }
+        gameOverPanel.transform.DOKill();
+        if (gameOverCanvasGroup != null)
+        {
+            gameOverCanvasGroup.DOKill();
+        }
+        gameOverPanel.transform.localScale = Vector3.one * panelStartScale;
+        if (gameOverCanvasGroup != null)
+        {
+            gameOverCanvasGroup.alpha = 0f;
+        }
+        gameOverPanel.transform.DOScale(Vector3.one,panelAnimationDuration).SetEase(Ease.OutBack);
+        if (gameOverCanvasGroup != null)
+        {
+            gameOverCanvasGroup.DOFade(1f,panelAnimationDuration);
+        }
     }
 }

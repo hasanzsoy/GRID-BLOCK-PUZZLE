@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ public class HighScoreManager : MonoBehaviour
     private int bestScore;
     private bool newHighScoreShownThisGame;
     private const string BestScoreKey = "BestScore";
+    [Header("New High Score Animation")]
+    [SerializeField] private float newHighScoreStartScale = 0.70f;
+    [SerializeField] private float newHighScoreDuration = 0.35f;
 
     private void Start()
     {
@@ -61,6 +65,9 @@ public class HighScoreManager : MonoBehaviour
             return;
         }
         newHighScoreText.gameObject.SetActive(true);
+        newHighScoreText.transform.DOKill();
+        newHighScoreText.transform.localScale = Vector3.one * newHighScoreStartScale;
+        newHighScoreText.transform.DOScale(Vector3.one,newHighScoreDuration).SetEase(Ease.OutBack);
     }
 
     public void ResetForNewGame()
@@ -68,6 +75,8 @@ public class HighScoreManager : MonoBehaviour
         newHighScoreShownThisGame = false;
         if (newHighScoreText != null)
         {
+            newHighScoreText.transform.DOKill();
+            newHighScoreText.transform.localScale = Vector3.one;
             newHighScoreText.gameObject.SetActive(false);
         }
     }
