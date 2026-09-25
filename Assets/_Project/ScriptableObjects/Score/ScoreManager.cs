@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text scoreText;
     private int currentScore;
     private HighScoreManager highScoreManager;
+    [Header("Score Animation")]
+    [SerializeField] private float scorePunchScale = 0.20f;
+    [SerializeField] private float scorePunchDuration = 0.20f;
 
     private void Awake()
     {
@@ -25,6 +29,7 @@ public class ScoreManager : MonoBehaviour
         int earnedScore = blockCount * scoreSettings.scorePerBlock;
         currentScore += earnedScore;
         UpdateScoreText();
+        PlayScorePunch();
         Debug.Log("Parça puanı: " + earnedScore +" | Toplam skor: " + currentScore);
     }
 
@@ -53,6 +58,7 @@ public class ScoreManager : MonoBehaviour
         }
         currentScore += bonusScore;
         UpdateScoreText();
+        PlayScorePunch();
         Debug.Log("Line bonus: +" +bonusScore +" | Temizlenen çizgi: " + clearedLines +" | Toplam skor: " +currentScore);
     }
     public void AddComboScore(int comboCount)
@@ -82,5 +88,15 @@ public class ScoreManager : MonoBehaviour
     public int GetCurrentScore()
     {
         return currentScore;
+    }
+    private void PlayScorePunch()
+    {
+        if (scoreText == null)
+        {
+            return;
+        }
+        scoreText.transform.DOKill();
+        scoreText.transform.localScale = Vector3.one;
+        scoreText.transform.DOPunchScale(Vector3.one * scorePunchScale,scorePunchDuration,5,0.5f);
     }
 }
