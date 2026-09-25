@@ -115,7 +115,7 @@ public class BoardManager : MonoBehaviour
         }
         for (int i = 0;i < cellsToClear.Count;i++)
         {
-            cellsToClear[i].ClearCell();
+            cellsToClear[i].ClearCellAnimated();
         }
         Debug.Log("Temizlenen çizgi sayısı: " + completedLines);
         return completedLines;
