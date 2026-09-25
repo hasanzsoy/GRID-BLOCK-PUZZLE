@@ -14,8 +14,10 @@ public class BoardCell : MonoBehaviour
     [SerializeField] private float fallDistance = 350f;
     [SerializeField] private float fallDuration = 0.45f;
     [SerializeField] private float horizontalDrift = 100f;
-    [SerializeField] private float maxRotation = 90f;
+    [SerializeField] private float maxRotation = 65f;
     [SerializeField] private float fadeDuration = 0.15f;
+    [Header("Clear VFX")]
+    [SerializeField] private ClearVFX clearVfxPrefab;
 
     public void SetBlock(RectTransform block)
     {
@@ -64,8 +66,19 @@ public class BoardCell : MonoBehaviour
             Destroy(blockToClear.gameObject);
             return;
         }
+        blockToClear.SetAsLastSibling();
         blockToClear.SetParent(canvas.transform,true);
         blockToClear.SetAsLastSibling();
+        if (clearVfxPrefab != null)
+        {
+            ClearVFX newVfx = Instantiate(clearVfxPrefab,canvas.transform);
+            RectTransform vfxRect = newVfx.GetComponent<RectTransform>();
+            vfxRect.position = blockToClear.position;
+            vfxRect.localScale = Vector3.one;
+            vfxRect.SetAsLastSibling();
+            newVfx.Play(Color.white);
+            Debug.Log("Clear VFX çalıştı!");
+        }
         Vector2 startPosition = blockToClear.anchoredPosition;
         float randomX = Random.Range(-horizontalDrift,horizontalDrift);
         float randomRotation = Random.Range(-maxRotation,maxRotation);
