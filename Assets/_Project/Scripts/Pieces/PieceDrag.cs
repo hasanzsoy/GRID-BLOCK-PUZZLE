@@ -17,6 +17,7 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
     [SerializeField] private float dragScale = 1.15f;
     [SerializeField] private float pickupDuration = 0.12f;
     [SerializeField] private float returnDuration = 0.20f;
+    private LineClearFeedbackManager lineClearFeedbackManager;
 
 
     private void Awake()
@@ -28,6 +29,7 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         pieceTrayManager = FindFirstObjectByType<PieceTrayManager>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
         comboManager = FindFirstObjectByType<ComboManager>();
+        lineClearFeedbackManager = FindFirstObjectByType<LineClearFeedbackManager>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -57,6 +59,10 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
             Debug.Log("Parça board'a yerleştirildi.");
             scoreManager.AddPieceScore(blockCount);
             scoreManager.AddLineClearScore(clearedLines);
+            if (lineClearFeedbackManager != null)
+            {
+                lineClearFeedbackManager.Play(clearedLines);
+            }
             comboManager.ProcessMove(clearedLines);
             int currentCombo = comboManager.GetCurrentCombo();
             scoreManager.AddComboScore(currentCombo);

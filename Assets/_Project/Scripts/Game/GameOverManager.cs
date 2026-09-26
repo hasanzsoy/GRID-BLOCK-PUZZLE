@@ -20,6 +20,7 @@ public class GameOverManager : MonoBehaviour
     [SerializeField] private float panelAnimationDuration = 0.35f;
 
     private CanvasGroup gameOverCanvasGroup;
+    private LineClearFeedbackManager lineClearFeedbackManager;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class GameOverManager : MonoBehaviour
         {
             gameOverCanvasGroup = gameOverPanel.GetComponent<CanvasGroup>();
         }
+        lineClearFeedbackManager = FindFirstObjectByType<LineClearFeedbackManager>();
     }
 
     private void Start()
@@ -80,6 +82,10 @@ public class GameOverManager : MonoBehaviour
         boardManager.ResetBoard();
         scoreManager.ResetScore();
         comboManager.ResetCombo();
+        if (lineClearFeedbackManager != null)
+        {
+            lineClearFeedbackManager.ResetFeedback();
+        }
         highScoreManager.ResetForNewGame();
         pieceTrayManager.ResetTray();
         isGameOver = false;
