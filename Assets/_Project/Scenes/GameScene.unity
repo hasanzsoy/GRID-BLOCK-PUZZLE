@@ -1381,6 +1381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LineClearFeedbackManager
   feedbackText: {fileID: 1056540668}
   boardRect: {fileID: 828333344}
+  scoreSettings: {fileID: 11400000, guid: 656b30f15358d8249a6cdb3615e00ad1, type: 2}
   startScale: 0.7
   popDuration: 0.18
   stayDuration: 0.25

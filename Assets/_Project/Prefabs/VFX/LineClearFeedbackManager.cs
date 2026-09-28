@@ -1,16 +1,22 @@
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+
 public class LineClearFeedbackManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private TMP_Text feedbackText;
     [SerializeField] private RectTransform boardRect;
+
+    [Header("Score Settings")]
+    [SerializeField] private ScoreSettingsSO scoreSettings;
+
     [Header("Text Animation")]
     [SerializeField] private float startScale = 0.70f;
     [SerializeField] private float popDuration = 0.18f;
     [SerializeField] private float stayDuration = 0.25f;
     [SerializeField] private float fadeDuration = 0.22f;
+
     [Header("Board Feedback")]
     [SerializeField] private float boardPunchPerLine = 0.0125f;
     [SerializeField] private float boardPunchDuration = 0.18f;
@@ -20,26 +26,25 @@ public class LineClearFeedbackManager : MonoBehaviour
     {
         if (feedbackText != null)
         {
-            feedbackCanvasGroup =feedbackText.GetComponent<CanvasGroup>();
+            feedbackCanvasGroup = feedbackText.GetComponent<CanvasGroup>();
         }
     }
-
     private void Start()
     {
         ResetFeedback();
     }
-    public void Play(int clearedLines)
+        public void Play(int clearedLines)
     {
         if (clearedLines <= 0)
         {
             return;
         }
-
         if (feedbackText == null)
         {
             return;
         }
-        feedbackText.text = GetClearMessage(clearedLines);
+        int clearBonus = GetClearBonus(clearedLines);
+        feedbackText.text = "+" + clearBonus;
         feedbackText.gameObject.SetActive(true);
         feedbackText.transform.DOKill();
         if (feedbackCanvasGroup != null)
@@ -47,10 +52,10 @@ public class LineClearFeedbackManager : MonoBehaviour
             feedbackCanvasGroup.DOKill();
             feedbackCanvasGroup.alpha = 1f;
         }
-
         if (boardRect != null)
         {
             boardRect.DOKill();
+            boardRect.localScale = Vector3.one;
         }
         feedbackText.transform.localScale = Vector3.one * startScale;
         Sequence textSequence = DOTween.Sequence();
@@ -64,18 +69,44 @@ public class LineClearFeedbackManager : MonoBehaviour
         {
             textSequence.AppendInterval(fadeDuration);
         }
-
         textSequence.OnComplete(() =>
-            {
+        {
                 if (feedbackText != null)
                 {
-                    feedbackText.transform.localScale = Vector3.one;
+                    feedbackText.transform.localScale =
+                        Vector3.one;
+
                     feedbackText.gameObject.SetActive(false);
                 }
             }
         );
-
         PlayBoardPunch(clearedLines);
+    }
+
+    private int GetClearBonus(int clearedLines)
+    {
+        if (scoreSettings == null)
+        {
+            Debug.LogWarning("LineClearFeedbackManager: ScoreSettings atanmadı!");
+            return 0;
+        }
+
+        if (clearedLines == 1)
+        {
+            return scoreSettings.oneLineBonus;
+        }
+
+        if (clearedLines == 2)
+        {
+            return scoreSettings.twoLineBonus;
+        }
+
+        if (clearedLines == 3)
+        {
+            return scoreSettings.threeLineBonus;
+        }
+
+        return scoreSettings.fourOrMoreLineBonus;
     }
 
     private void PlayBoardPunch(int clearedLines)
@@ -84,33 +115,11 @@ public class LineClearFeedbackManager : MonoBehaviour
         {
             return;
         }
-
         int safeLineCount = Mathf.Clamp(clearedLines,1,4);
         float punchStrength = boardPunchPerLine * safeLineCount;
         boardRect.localScale = Vector3.one;
         boardRect.DOPunchScale(new Vector3(punchStrength,punchStrength,0f),boardPunchDuration,6,0.5f);
     }
-
-    private string GetClearMessage(int clearedLines)
-    {
-        if (clearedLines == 1)
-        {
-            return "CLEAR!";
-        }
-
-        if (clearedLines == 2)
-        {
-            return "DOUBLE CLEAR!";
-        }
-
-        if (clearedLines == 3)
-        {
-            return "TRIPLE CLEAR!";
-        }
-
-        return "MEGA CLEAR!";
-    }
-
     public void ResetFeedback()
     {
         if (feedbackText != null)
