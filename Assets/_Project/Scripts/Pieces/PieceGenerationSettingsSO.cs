@@ -13,4 +13,7 @@ public class PieceGenerationSettingsSO : ScriptableObject
     [Header("Batch Rules")]
     [Min(0)]
     public int maxLargePiecesPerBatch = 1;
+    [Header("Anti Repeat Rules")]
+    public bool avoidSamePieceInSameBatch = true;
+    public bool avoidPreviousBatchPieces = true;
 }
