@@ -8,4 +8,6 @@ public class PieceDataSO : ScriptableObject
 
     [Header("Piece Shape")]
     public Vector2Int[] cells;
+    [Header("Piece Category")]
+    public PieceSizeCategory sizeCategory;
 }

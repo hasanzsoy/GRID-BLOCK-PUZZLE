@@ -2040,6 +2040,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0d5236112664d1d4b85fad9bbc70d0eb, type: 2}
   - {fileID: 11400000, guid: 991d7fb23a19b6d449888897660730bf, type: 2}
   - {fileID: 11400000, guid: 67f1598c12b7df348badf501a371987b, type: 2}
+  generationSettings: {fileID: 11400000, guid: a29dbe670b6c7e6439ef58480884700c, type: 2}
+  trayPieceScale: 0.75
 --- !u!222 &1839200602
 CanvasRenderer:
   m_ObjectHideFlags: 0
