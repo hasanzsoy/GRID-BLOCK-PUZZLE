@@ -11,19 +11,16 @@ public class PieceTrayManager : MonoBehaviour
 
     [Header("Available Pieces")]
     public PieceDataSO[] availablePieces;
-
     private int remainingPieces;
-
-    private List<Piece> activePieces =
-        new List<Piece>();
-
+    private List<Piece> activePieces = new List<Piece>();
     private BoardManager boardManager;
     private GameOverManager gameOverManager;
+    [Header("Tray Visual Settings")]
+    [SerializeField] private float trayPieceScale = 0.75f;
 
     private void Awake()
     {
         boardManager = FindFirstObjectByType<BoardManager>();
-
         gameOverManager = FindFirstObjectByType<GameOverManager>();
     }
 
@@ -35,14 +32,13 @@ public class PieceTrayManager : MonoBehaviour
     private void CreateNewPieces()
     {
         activePieces.Clear();
-
         for (int i = 0;i < pieceSlots.Length;i++)
         {
             PieceDataSO randomPieceData = GetRandomPiece();
             Piece newPiece = Instantiate(piecePrefab,pieceSlots[i]);
             RectTransform pieceRect = newPiece.GetComponent<RectTransform>();
             pieceRect.anchoredPosition = Vector2.zero;
-            pieceRect.localScale = Vector3.one;
+            pieceRect.localScale = Vector3.one * trayPieceScale;
             newPiece.Setup(randomPieceData);
             activePieces.Add(newPiece);
         }
@@ -72,7 +68,6 @@ public class PieceTrayManager : MonoBehaviour
          for (int i = 0;i < activePieces.Count;i++)
         {
             Piece currentPiece = activePieces[i];
-
             if (currentPiece == null)
             {
                 continue;
@@ -86,7 +81,6 @@ public class PieceTrayManager : MonoBehaviour
         }
 
         Debug.Log("NO SPACE LEFT!");
-
         if (gameOverManager != null)
         {
             gameOverManager.ShowGameOver();
@@ -97,7 +91,6 @@ public class PieceTrayManager : MonoBehaviour
         for (int i = 0;i < activePieces.Count;i++)
         {
             Piece currentPiece = activePieces[i];
-
             if (currentPiece != null)
             {
                 currentPiece.gameObject.SetActive(false);

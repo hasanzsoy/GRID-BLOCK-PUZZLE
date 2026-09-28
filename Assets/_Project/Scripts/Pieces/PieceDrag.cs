@@ -18,6 +18,7 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
     [SerializeField] private float pickupDuration = 0.12f;
     [SerializeField] private float returnDuration = 0.20f;
     private LineClearFeedbackManager lineClearFeedbackManager;
+    private Vector3 startScale;
 
 
     private void Awake()
@@ -36,6 +37,7 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
     {
         startParent = transform.parent;
         startPosition = rectTransform.anchoredPosition;
+        startScale = transform.localScale;
         transform.SetParent(canvas.transform,true);
         transform.SetAsLastSibling();
         transform.DOKill();
@@ -81,6 +83,6 @@ public class PieceDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
         rectTransform.DOKill();
         transform.SetParent(startParent,true);
         rectTransform.DOAnchorPos(startPosition,returnDuration).SetEase(Ease.OutQuad);
-        transform.DOScale(Vector3.one,returnDuration).SetEase(Ease.OutQuad);
+        transform.DOScale(startScale,returnDuration).SetEase(Ease.OutQuad);
     }
 }
