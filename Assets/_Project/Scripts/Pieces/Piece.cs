@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Piece : MonoBehaviour
 {
@@ -78,6 +79,16 @@ public class Piece : MonoBehaviour
     private void CreateBlock(Vector2Int cellPosition,float centerX,float centerY)
     {
         RectTransform newBlock = Instantiate(blockPrefab,transform);
+        Image blockImage = newBlock.GetComponent<Image>();
+
+        UIThemeManager themeManager = FindFirstObjectByType<UIThemeManager>();
+
+        if (blockImage != null &&
+            themeManager != null)
+        {
+            blockImage.color =
+                themeManager.GetPieceColor();
+        }
 
         float xPosition = (cellPosition.x - centerX) * blockSize;
 
